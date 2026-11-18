@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #F4F1EA; --card: #FFFFFF; --line: #E2DCCF; --line2: #F0EBE1; --soft: #F7F4ED; --soft2: #F2EDE2;
+  --text: #1E1C18; --muted: #5F594E; --faint: #6B655A; --head: #1E1C18; --head-text: #F4F1EA; --head-muted: #CFC8B8;
+  --head-faint: #9F988A; --head-tile: #2A2721; --head-track: #3A3730; --accent: #F2B33D; --link: #1F5FBF;
+  --c-bg: #DCE8FB; --c-fg: #1B4F9C; --p-bg: #FCE3CC; --p-fg: #8A4210; --m-bg: #F5DEDA; --m-fg: #8C2A1E;
+  --e-bg: #E7E1F5; --e-fg: #4D3A8A; --o-bg: #ECE9E2; --o-fg: #59534A; --note-bg: #FBF6E8; --note-fg: #5A4A1C;
+  --tile: #F1EEE6; --s-bg: #D7EFE9; --s-fg: #1D5E52; --x: #D23F31; --ok: #23875A;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141310; --card: #1D1B17; --line: #2F2C26; --line2: #26231E; --soft: #24211C; --soft2: #2B2822;
+    --text: #EEEAE0; --muted: #B4AD9F; --faint: #A39C8E; --head: #0C0B09; --head-tile: #1D1B17; --head-track: #2F2C26;
+    --link: #8DB3F5; --c-bg: #1D2D47; --c-fg: #A9C7F7; --p-bg: #3D2914; --p-fg: #F3B98A; --m-bg: #3F1F1A; --m-fg: #F2A99D;
+    --e-bg: #2B2440; --e-fg: #C7B8F2; --o-bg: #2B2822; --o-fg: #C9C2B4; --note-bg: #2F2915; --note-fg: #E9D49B;
+    --tile: #2A2722; --s-bg: #173A33; --s-fg: #93DCCB; --x: #E5574A; --ok: #36A873;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141310; --card: #1D1B17; --line: #2F2C26; --line2: #26231E; --soft: #24211C; --soft2: #2B2822;
+  --text: #EEEAE0; --muted: #B4AD9F; --faint: #A39C8E; --head: #0C0B09; --head-tile: #1D1B17; --head-track: #2F2C26;
+  --link: #8DB3F5; --c-bg: #1D2D47; --c-fg: #A9C7F7; --p-bg: #3D2914; --p-fg: #F3B98A; --m-bg: #3F1F1A; --m-fg: #F2A99D;
+  --e-bg: #2B2440; --e-fg: #C7B8F2; --o-bg: #2B2822; --o-fg: #C9C2B4; --note-bg: #2F2915; --note-fg: #E9D49B;
+  --tile: #2A2722; --s-bg: #173A33; --s-fg: #93DCCB; --x: #E5574A; --ok: #36A873;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.disp { font-family: "Space Grotesk", Inter, system-ui, sans-serif; }
+.mono { font-family: "JetBrains Mono", ui-monospace, Consolas, monospace; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+header { background: var(--head); color: var(--head-text); }
+header .wrap { padding-top: 36px; padding-bottom: 32px; display: flex; flex-direction: column; gap: 26px; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; color: var(--head-muted); }
+.crumbs b { color: var(--head-text); font-weight: 600; }
+.brand { font-weight: 700; font-size: 15px; color: var(--head-text); letter-spacing: .02em; }
+.hero { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between; }
+.hero h1 { margin: 0 0 10px; font-weight: 700; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; letter-spacing: -.02em; }
+.hero p { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--head-muted); max-width: 580px; }
+.meter { flex: 0 1 300px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: var(--head-muted); }
+.meter .row { display: flex; justify-content: space-between; }
+.meter .row b { color: var(--head-text); }
+.track { height: 10px; border-radius: 99px; background: var(--head-track); overflow: hidden; }
+.track > div { height: 100%; background: var(--accent); border-radius: 99px; }
+.meter small { color: var(--head-faint); font-size: 12px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.kpi { background: var(--head-tile); border-radius: 14px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+.kpi .l { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--head-muted); }
+.kpi .l i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.kpi .n { font-size: 34px; font-weight: 700; }
+.kpi small { font-size: 12px; color: var(--head-faint); }
+main.wrap { padding-top: 26px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 18px; }
+.bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.tabs { display: flex; gap: 4px; background: var(--soft2); padding: 4px; border-radius: 12px; }
+.tabs button { font: 600 14px/1 Inter, system-ui, sans-serif; padding: 12px 18px; border-radius: 9px; border: 0; cursor: pointer; background: transparent; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--card); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; flex: 0 1 360px; min-height: 44px; }
+.search input { border: 0; outline: 0; font: 400 14px Inter, system-ui, sans-serif; flex: 1; background: transparent; color: var(--text); min-width: 0; }
+.search:focus-within { border-color: var(--link); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { font: 500 13px/1 Inter, system-ui, sans-serif; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; min-height: 38px; }
+.chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.hint { font-size: 13px; color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.card + .card { margin-top: 14px; }
+.shead { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line2); }
+.stepno { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 14px; background: var(--head); color: var(--head-text); flex: 0 0 auto; }
+.stepno span { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--head-muted); }
+.stepno b { font-size: 22px; line-height: 1; font-weight: 700; }
+.stitle { flex: 1 1 240px; display: flex; flex-direction: column; gap: 4px; }
+.stitle .t { font-weight: 600; font-size: 18px; }
+.stitle .m { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--muted); }
+.pill { background: var(--soft2); border-radius: 6px; padding: 2px 8px; }
+.adds { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; max-width: 100%; }
+.cap { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+.addlist { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.add { display: flex; align-items: center; gap: 6px; background: var(--soft); border-radius: 8px; padding: 3px 9px 3px 3px; font-size: 12px; color: var(--muted); }
+.add .th { width: 30px; height: 30px; border-radius: 6px; }
+.row { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line2); }
+.row:last-child { border-bottom: 0; }
+.kindcol { flex: 0 0 128px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.badge { display: inline-block; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; }
+.k-colour { background: var(--c-bg); color: var(--c-fg); }
+.k-part, .k-partcolour { background: var(--p-bg); color: var(--p-fg); }
+.k-missing { background: var(--m-bg); color: var(--m-fg); }
+.k-extra { background: var(--e-bg); color: var(--e-fg); }
+.k-offset, .k-print { background: var(--o-bg); color: var(--o-fg); }
+.k-swap { background: var(--s-bg); color: var(--s-fg); }
+.kindcol small { font-size: 12px; color: var(--faint); }
+.swap { flex: 1 1 520px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.side { display: flex; align-items: center; gap: 12px; min-width: 210px; flex: 1 1 210px; }
+.side.blank { opacity: .6; }
+.side .txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.side .cn { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 6px; }
+.dot { width: 11px; height: 11px; border-radius: 3px; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); flex: 0 0 auto; }
+.side .pd { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.th { width: 68px; height: 68px; border-radius: 12px; background: var(--tile); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; position: relative; }
+.th img { width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+.th.ring::after { content: ""; position: absolute; inset: -3px; border-radius: 14px; border: 2px solid var(--ring, transparent); }
+.th.none { border: 2px dashed var(--line); background: transparent; }
+.th .mk { position: absolute; top: -7px; right: -7px; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 0 0 3px var(--card); z-index: 1; }
+.th .mk.x { background: var(--x); }
+.th .mk.ok { background: var(--ok); }
+.side .cap .act { font-weight: 700; }
+.side.out .cap .act { color: var(--x); }
+.side.in .cap .act { color: var(--ok); }
+.th .fb { width: 46%; height: 34%; border-radius: 4px; box-shadow: inset 0 -3px 0 rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.3); }
+.arrow { color: var(--faint); flex: 0 0 auto; }
+.pg { flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; border: 0; background: none; padding: 0; cursor: zoom-in; color: inherit; font: inherit; text-align: left; }
+.pg img { display: block; width: 168px; height: auto; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+.pg:hover img { border-color: var(--link); }
+dialog.page { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1000px); max-height: 96vh; }
+dialog.page::backdrop { background: rgba(10, 9, 8, .78); }
+dialog.page img { display: block; max-width: 100%; max-height: 92vh; border-radius: 10px; background: #fff; }
+dialog.page .cl { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(20,19,16,.75); color: #fff; font-size: 22px; line-height: 1; cursor: pointer; }
+.fix { flex: 1 1 230px; display: flex; flex-direction: column; gap: 3px; background: var(--soft); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+.fix .f { font-size: 12.5px; overflow-wrap: anywhere; }
+.fix .l { font-size: 12.5px; color: var(--muted); }
+.note { display: flex; gap: 10px; align-items: flex-start; padding: 12px 20px; background: var(--note-bg); color: var(--note-fg); font-size: 13px; }
+.more { display: block; margin: 16px auto 0; }
+.empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+.prow { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--line2); }
+.prow:last-child { border-bottom: 0; }
+.pname { flex: 1 1 220px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bars { flex: 0 1 250px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--muted); }
+.bars > div { display: flex; align-items: center; gap: 8px; }
+.bars .lab { width: 84px; }
+.bars .tr { flex: 1; height: 8px; background: var(--soft2); border-radius: 99px; overflow: hidden; }
+.bars .tr > div { height: 100%; border-radius: 99px; }
+.bars .v { width: 30px; text-align: right; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.diff { flex: 0 0 66px; text-align: center; font-weight: 700; font-size: 19px; border-radius: 10px; padding: 8px 0; }
+.diff.plus { background: var(--e-bg); color: var(--e-fg); }
+.diff.minus { background: var(--m-bg); color: var(--m-fg); }
+.diff.same { background: var(--soft2); color: var(--muted); }
+.steps { flex: 1 1 260px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.steps .s { font-size: 12px; font-weight: 500; background: var(--soft2); border-radius: 6px; padding: 3px 8px; }
+details.inmodel { flex-basis: 100%; font-size: 12.5px; color: var(--muted); }
+details.inmodel summary { cursor: pointer; color: var(--link); }
+details.inmodel ul { margin: 6px 0 0; padding-left: 18px; }
+footer { font-size: 12.5px; color: var(--faint); display: flex; flex-direction: column; gap: 4px; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .kindcol { flex-basis: 100%; flex-direction: row; align-items: center; }
+  .adds { align-items: flex-start; } .addlist { justify-content: flex-start; }
+  .search { flex-basis: 100%; }
+  .th { width: 56px; height: 56px; }
+  .swap { flex-direction: column; align-items: stretch; gap: 8px; }
+  .side { min-width: 0; flex: 0 0 auto; }
+  .arrow { transform: rotate(90deg); margin-left: 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="crumbs"><span class="brand disp">bicheck</span><span aria-hidden="true">·</span><span class="mono" id="mfile"></span><span>compared with</span><b id="iname"></b></div>
+    <div class="hero">
+      <div><h1 class="disp" id="headline"></h1><p id="lede"></p></div>
+      <div class="meter" id="meter"></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="bar">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="steps">Mistakes by step</button>
+      <button role="tab" aria-selected="false" data-tab="parts">Parts &amp; colours</button>
+    </div>
+    <label class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input type="search" id="q" placeholder="Part, colour, bag or step — e.g. 3005 dark tan" aria-label="Search parts, colours, bags and steps"></label>
+  </div>
+  <section id="tab-steps">
+    <div class="chips" id="filters"></div>
+    <div id="stepList" style="margin-top:16px"></div>
+  </section>
+  <section id="tab-parts" hidden>
+    <div class="chips" id="pfilters"></div>
+    <div id="partList" style="margin-top:16px"></div>
+  </section>
+  <footer id="foot"></footer>
+  <dialog class="page" id="pageView"><img id="pageImg" alt=""><button class="cl" id="pageClose" aria-label="Close">×</button></dialog>
+</main>
+<script>
+const D = __DATA__;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const S = D.summary, T = D.thumbs || {}, PG = D.pages || {};
+const fmt = n => Number(n).toLocaleString("en");
+const KIND = {colour: "Wrong colour", part: "Wrong part", "part+colour": "Wrong part and colour", print: "Print differs",
+              missing: "Missing", extra: "Extra", offset: "Shifted a little", swap: "Swapped"};
+const KCLASS = k => "k-" + k.replace("+", "");
+const RING = {colour: "var(--c-fg)", part: "var(--p-fg)", "part+colour": "var(--p-fg)", swap: "var(--s-fg)", extra: "var(--e-fg)", print: "var(--o-fg)", offset: "var(--o-fg)"};
+const minor = x => x.kind === "offset" || x.kind === "print";
+const left = x => x.kind === "missing" || x.kind === "extra";
+
+const MK = {
+  x: `<span class="mk x" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"></path></svg></span>`,
+  ok: `<span class="mk ok" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 1.5v7M1.5 5h7"></path></svg></span>`,
+};
+function thumb(p, ring, mark) {
+  if (!p) return `<div class="th none" aria-hidden="true"></div>`;
+  const src = T[`${p.file}|${p.color.code}`];
+  const alt = `${p.color.name} ${p.file} ${p.desc || ""}`.trim();
+  const inner = src ? `<img src="${src}" alt="${esc(alt)}" loading="lazy">` : `<span class="fb" style="background:${esc(p.color.rgb)}" role="img" aria-label="${esc(alt)}"></span>`;
+  return `<div class="th${ring ? " ring" : ""}"${ring ? ` style="--ring:${ring}"` : ""}>${inner}${mark ? MK[mark] : ""}</div>`;
+}
+const pname = p => `<span class="mono">${esc(p.file)}</span>${p.print ? ` · ${esc(p.print)}` : ""}${p.desc ? ` ${esc(p.desc.replace(/\s+/g, " "))}` : ""}`;
+const cname = c => `<span class="dot" style="background:${esc(c.rgb)}"></span>${esc(c.name)}`;
+// one side of a mistake: `act` "out" = take this out of your model, "in" = put this in, "" = just show it
+const side = (label, p, ring, act, empty) => {
+  const cap = act ? `<span class="cap"><span class="act">${act === "out" ? "Remove" : "Put in"}</span> · ${label}</span>` : `<span class="cap">${label}</span>`;
+  return p
+    ? `<div class="side${act ? " " + act : ""}">${thumb(p, ring, act === "out" ? "x" : act === "in" ? "ok" : "")}<div class="txt">${cap}<span class="cn">${cname(p.color)}</span><span class="pd">${pname(p)}</span></div></div>`
+    : `<div class="side blank">${thumb(null)}<div class="txt"><span class="cap">${label[0].toUpperCase() + label.slice(1)}</span><span class="cn">${empty}</span></div></div>`;
+};
+// your part first (what to take out), then what the instructions want there (what to put in)
+const sides = x => {
+  if (x.kind === "swap" || minor(x))
+    return `${side("Your model", x.have, RING[x.kind])}${ARROW}${side("Instructions", x.want)}`;
+  return `${side("your model", x.have, x.have ? "var(--x)" : "", "out", "Not in your model")}${ARROW}${side("instructions", x.want, "", "in", "Nothing: just take it out")}`;
+};
+const ARROW = `<svg class="arrow" width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8h22M18 2l6 6-6 6"></path></svg>`;
+const INFO = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.5"></path></svg>`;
+
+// -- header ------------------------------------------------------------------------------
+const main = D.issues.filter(x => !x.fig && !minor(x));
+const mainSteps = new Set(main.map(x => x.step));
+const SN = n => D.steps[n]?.label || n;
+const BK = S.mode === "booklets";   // compared with the PDF booklets: by step and count, no positions   // the step number as printed in the booklet
+const kc = k => main.filter(x => k.includes(x.kind)).length;
+$("#mfile").textContent = D.model;
+$("#iname").textContent = D.instructions || "the building instructions";
+$("#headline").textContent = !S.paired ? "Only the part counts could be compared"
+  : main.length ? `${fmt(main.length)} part${main.length === 1 ? "" : "s"} to check in ${fmt(mainSteps.size)} step${mainSteps.size === 1 ? "" : "s"}`
+  : "Your model matches the instructions";
+$("#lede").textContent = !S.paired
+  ? "Your model could not be lined up with the instructions (too few parts in the same places), so this report lists the part and colour counts with every step that uses each one."
+  : main.length && BK ? "Each card is a step of the booklets with the parts that differ in your model: what the booklet uses, what you have, and the line to fix in your file. Compared step by step and part by part, so a right part in a wrong spot of its step isn’t shown."
+  : main.length ? "Each card is a step of the instructions with the parts that differ in your model: what the instructions use, what you have, and the line to fix in your file."
+  : "Every part lines up with the instructions. Small shifts and minifigure differences, if any, are under the filters.";
+$("#meter").innerHTML = S.paired ? `<div class="row"><span>${BK ? "Matched with the booklets’ parts" : "Lined up with the instructions"}</span><b>${S.lined_up}%</b></div>
+  <div class="track" role="img" aria-label="${S.lined_up}% ${BK ? "matched" : "lined up"}"><div style="width:${S.lined_up}%"></div></div>
+  <small>${fmt(S.paired)} of ${fmt(S.model_parts)} parts · ${fmt(S.steps)} steps${S.seconds ? ` · checked in ${S.seconds} s` : ""}</small>` : "";
+$("#kpis").innerHTML = [
+  ["Wrong colour", kc(["colour"]), "right part, other colour", "#7FA8E8"],
+  ["Wrong part", kc(["part", "part+colour"]), "something else in its place", "#F0A15C"],
+  ["Swapped", kc(["swap"]), "two parts in each other’s places", "#6CC7B3"],
+  ["Missing", kc(["missing"]), "in the instructions only", "#E58A7C"],
+  ["Extra", kc(["extra"]), "in your model only", "#AE9BE0"],
+].filter(([l]) => !(BK && l === "Swapped")).map(([l, n, h, c]) => `<div class="kpi"><span class="l"><i style="background:${c}"></i>${l}</span><span class="n disp">${fmt(n)}</span><small>${h}</small></div>`).join("");
+
+// -- tabs -------------------------------------------------------------------------------
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  $("#tab-steps").hidden = b.dataset.tab !== "steps";
+  $("#tab-parts").hidden = b.dataset.tab !== "parts";
+});
+
+// -- mistakes by step ---------------------------------------------------------------------
+const F = {colour: true, part: true, swap: true, left: true, minor: false, fig: false};
+const nFig = D.issues.filter(x => x.fig).length, nMinor = D.issues.filter(x => !x.fig && minor(x)).length;
+const FILTERS = [["colour", "Wrong colour", kc(["colour"])], ["part", "Wrong part", kc(["part", "part+colour"])], ["swap", "Swapped", kc(["swap"])],
+                 ["left", "Missing & extra", kc(["missing", "extra"])], ["minor", "Small shifts & prints", nMinor], ["fig", "Minifigures", nFig]]
+                 .filter(([k]) => !(BK && (k === "swap" || k === "minor")));
+function drawFilters() {
+  $("#filters").innerHTML = FILTERS.map(([k, l, n]) => `<button class="chip" data-f="${k}" aria-pressed="${F[k]}">${l} · ${fmt(n)}</button>`).join("");
+  document.querySelectorAll("#filters .chip").forEach(b => b.onclick = () => { F[b.dataset.f] = !F[b.dataset.f]; drawFilters(); shown = 40; renderSteps(); });
+}
+const keep = x => (x.fig ? F.fig : minor(x) ? F.minor : left(x) ? F.left : x.kind === "colour" ? F.colour : x.kind === "swap" ? F.swap : F.part);
+const hay = x => [KIND[x.kind], x.want?.file, x.want?.desc, x.want?.color.name, x.have?.file, x.have?.desc, x.have?.color.name,
+                  x.where?.chain.join(" "), D.steps[x.step]?.bag, x.step].join(" ").toLowerCase();
+const pkey = p => p ? `${p.file}|${p.color.code}|${p.print || ""}` : "";
+// a line of the model file that shows up in several steps: a submodel used more than once
+const lineSteps = new Map();
+for (const x of D.issues) if (x.where) {
+  const k = `${x.where.submodel}:${x.where.line}`;
+  if (!lineSteps.has(k)) lineSteps.set(k, new Set());
+  lineSteps.get(k).add(x.step);
+}
+let shown = 40;
+function renderSteps() {
+  const words = $("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const groups = new Map();
+  for (const x of D.issues) {
+    if (!keep(x)) continue;
+    if (words.length) { const h = hay(x); if (!words.every(w => h.includes(w))) continue; }
+    if (!groups.has(x.step)) groups.set(x.step, []);
+    groups.get(x.step).push(x);
+  }
+  const order = [...groups.keys()].sort((a, b) => (a || 1e9) - (b || 1e9));
+  const cards = order.slice(0, shown).map(n => card(n, groups.get(n)));
+  $("#stepList").innerHTML = cards.join("") + (order.length > shown
+    ? `<button class="chip more" id="more">Show ${Math.min(40, order.length - shown)} more steps (${order.length - shown} left)</button>` : "")
+    || `<div class="card empty">${D.issues.length ? "Nothing matches the search or filters." : S.paired ? (BK ? "No differences found." : "No differences found by position.") : "Nothing to show by step: see Parts & colours."}</div>`;
+  const m = $("#more"); if (m) m.onclick = () => { shown += 40; renderSteps(); };
+  document.querySelectorAll("#stepList .pg").forEach(b => b.onclick = () => {
+    const n = b.dataset.step, st = D.steps[n] || {};
+    $("#pageImg").src = PG[n];
+    $("#pageImg").alt = `Step ${SN(n)}${st.book ? ", " + st.book : ""}, with the step number circled`;
+    $("#pageView").showModal();
+  });
+}
+function card(n, list) {
+  const st = D.steps[n] || {};
+  // the same mistake several times in a step (four bricks in the wrong colour): one row
+  const rows = new Map();
+  for (const x of list) {
+    const k = [x.kind, pkey(x.want), pkey(x.have), x.where ? x.where.chain.join(">") : "", x.fig ? 1 : 0].join("~");
+    if (!rows.has(k)) rows.set(k, []);
+    rows.get(k).push(x);
+  }
+  const also = new Set();
+  const body = [...rows.values()].map(xs => {
+    const x = xs[0], q = xs.length;
+    let fix;
+    if (x.where) {
+      const byStep = new Map();
+      for (const y of xs) { if (!byStep.has(y.where.step)) byStep.set(y.where.step, []); byStep.get(y.where.step).push(y.where.line); }
+      const lines = [...byStep].map(([s, ls]) => `Step ${s} · line${ls.length > 1 ? "s" : ""} ${ls.sort((a, b) => a - b).join(", ")}`).join("; ");
+      for (const y of xs) for (const s of lineSteps.get(`${y.where.submodel}:${y.where.line}`) || []) if (s !== n && s) also.add(s);
+      fix = `<div class="fix"><span class="cap">Fix in your file</span><span class="f mono">${esc(x.where.chain.join(" › "))}</span><span class="l">${esc(lines)}${x.kind === "extra" && x.near ? ` · nearest instructions part: step ${SN(x.near)}` : ""}${x.kind === "swap" ? ` · this part belongs ${Math.round(x.distance)} LDU away${x.near && x.near !== n ? ` (step ${SN(x.near)})` : ""}` : ""}</span></div>`;
+    } else {
+      fix = `<div class="fix"><span class="cap">Where it goes</span><span class="f">Step ${SN(n)} of the instructions${D.steps[n]?.book ? ` (${esc(D.steps[n].book)})` : ""}</span><span class="l">Not found at its place in your model</span></div>`;
+    }
+    return `<div class="row"><div class="kindcol"><span class="badge ${KCLASS(x.kind)}">${KIND[x.kind]}</span><small>${q} part${q > 1 ? "s" : ""}${x.fig ? " · minifigure" : ""}${x.kind === "offset" ? ` · ${x.distance} LDU` : ""}</small></div>
+      <div class="swap">${sides(x)}</div>${fix}</div>`;
+  }).join("");
+  const adds = (st.contents || []).slice(0, 8).map(c => `<span class="add" title="${esc(`${c.color.name} ${c.file} ${c.desc || ""}`)}">${thumb(c)}${c.qty}× <span class="mono">${esc(c.file)}</span></span>`).join("");
+  const more = (st.contents || []).length > 8 ? `<span class="add" style="padding-left:9px">+${st.contents.length - 8} more</span>` : "";
+  const head = n ? `<div class="stepno"><span>Step</span><b class="disp">${esc(String(SN(n)))}</b></div>
+      <div class="stitle"><span class="t disp">${esc(BK ? (st.bag ? "Bag " + st.bag : "Step " + SN(n)) : st.bag || "Step " + n)}</span><span class="m">${st.bag && !BK ? `<span class="pill">Bag “${esc(st.bag)}”</span>` : ""}${st.label ? "" : `<span>${st.path && st.path.includes(".") ? `In a sub-build (${esc(st.path)})` : "Main build"}</span>`}${st.book ? `<span>${esc(st.book)}</span>` : ""}</span></div>
+      ${adds ? `<div class="adds"><span class="cap">This step adds</span><div class="addlist">${adds}${more}</div></div>` : ""}
+      ${PG[n] ? `<button class="pg" data-step="${n}" aria-label="Show the booklet page of step ${esc(String(SN(n)))}"><span class="cap">Booklet page</span><img src="${PG[n]}" alt="" loading="lazy"></button>` : ""}`
+    : `<div class="stepno"><span>Step</span><b class="disp">–</b></div><div class="stitle"><span class="t disp">Not near any step</span><span class="m">Parts in your model away from everything in the instructions</span></div>`;
+  const note = also.size ? `<div class="note">${INFO}<span>The same lines of your file also show up in step${also.size > 1 ? "s" : ""} ${[...also].sort((a, b) => a - b).join(", ")}: that submodel is used more than once, so fixing it once fixes ${also.size > 1 ? "all of them" : "both"}.</span></div>` : "";
+  return `<section class="card"><div class="shead">${head}</div>${body}${note}</section>`;
+}
+
+// -- parts & colours ----------------------------------------------------------------------
+let onlyDiff = true, pshown = 80;
+function drawPFilters() {
+  const nd = D.counts.filter(c => c.bi !== c.model).length;
+  $("#pfilters").innerHTML = `<button class="chip" data-p="1" aria-pressed="${onlyDiff}">Only where the counts differ · ${fmt(nd)}</button>
+    <button class="chip" data-p="0" aria-pressed="${!onlyDiff}">All parts · ${fmt(D.counts.length)}</button>
+    <span class="hint">The numbers LDCad’s part list gives, with every step that uses the part.</span>`;
+  document.querySelectorAll("#pfilters .chip").forEach(b => b.onclick = () => { onlyDiff = b.dataset.p === "1"; pshown = 80; drawPFilters(); renderParts(); });
+}
+function renderParts() {
+  const words = $("#q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const rows = D.counts.filter(c => {
+    if (onlyDiff && !words.length && c.bi === c.model) return false;
+    if (!words.length) return true;
+    const h = `${c.file} ${c.desc} ${c.color.name} ${c.color.code ?? ""} ${c.steps.map(s => s[0]).join(" ")}`.toLowerCase();
+    return words.every(w => h.includes(w));
+  });
+  const top = Math.max(1, ...rows.slice(0, pshown).map(c => Math.max(c.bi, c.model)));
+  const html = rows.slice(0, pshown).map(c => {
+    const d = c.model - c.bi;
+    const steps = c.steps.slice(0, 14).map(([n, k]) => `<span class="s" title="${esc(D.steps[n]?.bag || "")}">${esc(String(SN(n)))}${k > 1 ? ` ×${k}` : ""}</span>`).join("")
+      + (c.steps.length > 14 ? `<span class="hint">+${c.steps.length - 14} more</span>` : "");
+    const pr = (c.prints_bi || c.prints_model) ? `<span class="pd hint">Prints: instructions ${esc(c.prints_bi || "plain")}; your model ${esc(c.prints_model || "plain")}</span>` : "";
+    const where = c.where.length ? `<details class="inmodel"><summary>Where they are in your file (${c.where.length})</summary><ul>${
+      c.where.slice(0, 200).map(w => `<li class="mono">${esc(w.chain.join(" › "))} · step ${w.step} · line ${w.line}</li>`).join("")}</ul></details>` : "";
+    return `<div class="prow">${thumb(c)}<div class="pname"><span class="cn" style="font-weight:600;font-size:15px;display:flex;gap:6px;align-items:center">${cname(c.color)}</span><span class="pd" style="font-size:13px;color:var(--muted)">${pname(c)}</span>${pr}</div>
+      <div class="bars"><div><span class="lab">Instructions</span><div class="tr"><div style="width:${100 * c.bi / top}%;background:var(--faint)"></div></div><span class="v">${c.bi}</span></div>
+      <div><span class="lab">Your model</span><div class="tr"><div style="width:${100 * c.model / top}%;background:${d > 0 ? "var(--e-fg)" : d < 0 ? "var(--m-fg)" : "var(--faint)"}"></div></div><span class="v">${c.model}</span></div></div>
+      <div class="diff disp ${d > 0 ? "plus" : d < 0 ? "minus" : "same"}" aria-label="difference ${d}">${d > 0 ? "+" + d : d < 0 ? "−" + -d : "="}</div>
+      <div class="steps">${c.steps.length ? `<span class="cap">Steps</span>${steps}` : `<span class="hint">In no instructions step</span>`}</div>${where}</div>`;
+  }).join("");
+  $("#partList").innerHTML = html ? `<div class="card">${html}</div>` + (rows.length > pshown ? `<button class="chip more" id="pmore">Show more (${rows.length - pshown} left)</button>` : "")
+    : `<div class="card empty">Nothing matches.</div>`;
+  const m = $("#pmore"); if (m) m.onclick = () => { pshown += 80; renderParts(); };
+}
+
+// -- footer -------------------------------------------------------------------------------
+const skipped = Object.entries(S.skipped || {}).map(([k, n]) => `${fmt(n)} ${esc(k)}`).join(" · ");
+$("#foot").innerHTML = `<span>Step numbers count every instructions step in reading order, a sub-build’s steps before the step that adds it; if they don’t match your booklet, use the bag and the “This step adds” parts to find the page.</span>
+  ${skipped ? `<span>Left out: ${skipped}.</span>` : ""}<span>Part pictures drawn from your LDraw library. Part tables: ${esc((S.mapping || []).map(p => p.split(/[\\/]/).pop()).join(", "))}.</span>`;
+
+$("#q").addEventListener("input", () => { shown = 40; pshown = 80; renderSteps(); renderParts(); });
+drawFilters(); drawPFilters(); renderSteps(); renderParts();
+$("#pageClose").onclick = () => $("#pageView").close();
+$("#pageView").onclick = e => { if (e.target.id === "pageView") $("#pageView").close(); };
+</script>
+</body>
+</html>

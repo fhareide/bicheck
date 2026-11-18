@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bicheck"
+version = "0.7.0"
+description = "Find where an LDraw model differs from its LEGO building instructions"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pillow", "pymupdf"]
+
+[project.scripts]
+bicheck = "bicheck.cli:main"
+
+[tool.setuptools]
+packages = ["bicheck"]
+
+[tool.setuptools.package-data]
+bicheck = ["report.html", "data/*.json", "data/*.csv.gz"]

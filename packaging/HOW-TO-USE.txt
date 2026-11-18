@@ -1,0 +1,91 @@
+bicheck 0.7.0 - find where your LDraw model differs from the LEGO building instructions
+===============================================================================
+
+LDCad tells you which parts you used too many or too few of. bicheck tells you WHERE:
+the instructions step each wrong part belongs to, and the line in your model file.
+
+HOW TO USE (Windows)
+--------------------
+1. Double-click bicheck.exe (or drag your model onto it). A small window opens.
+2. Model: Browse to your model. Models can be LDraw (.ldr / .mpd, from LDCad, LeoCAD, ...)
+   or BrickLink Studio (.io).
+3. Set: bicheck fills in the set, read from the file or folder name, keywords or title
+   (for example "21373  Downton Abbey"). Type another set number if it's wrong.
+4. Instruction booklets: bicheck compares your model with the set's booklets, the PDFs from
+   lego.com/service/building-instructions. Booklets it already has are listed. If there are
+   none yet:
+   - Paste links: on the LEGO page (Open LEGO page), right-click each booklet's Download
+     button, Copy link, and paste them all: bicheck downloads them, or
+   - Add PDFs: pick booklets you downloaded yourself, or
+   - Brickset key: save your own free Brickset API key once (from
+     brickset.com/tools/webservices/requestkey): bicheck then downloads the booklets of
+     every set by itself.
+   Booklets are kept in Documents\bicheck\booklets\<set number> (a folder beside your model
+   with the set number in its name works too), so the next check finds them by itself.
+5. Press Check model. The bar shows what it is doing. Reading the booklets takes about a
+   minute for a big set, once: the result is kept. Then the report opens in your browser
+   (Open the report opens it again). It is saved next to your model as
+   <model name>.bicheck.html.
+   (bicheck.exe --console asks these questions in the console window instead.)
+
+Windows may warn that the program is from an unknown publisher (it isn't signed):
+click "More info", then "Run anyway".
+
+THE REPORT
+----------
+The top says how many parts to check, in how many steps, and how much of your model
+lined up with the instructions.
+
+"Mistakes by step": one card per booklet step (with its number as printed, the booklet
+and the page), with pictures of the parts (drawn from your LDraw library, in their colours):
+  - Wrong colour / Wrong part: your part first, marked with a red X ("Remove"), then the
+    instructions' part with a green + ("Put in").
+  - Swapped: the right part is in your model, but in another part's place close by
+    (two parts traded places). The note says where it belongs.
+  - Missing: a part of that step that isn't in your model.
+  - Extra: a part in your model that isn't in the instructions.
+  With the booklets, each card also shows the booklet page with the step number circled
+  in red: click it to see the page large.
+  The same mistake several times in a step is one row ("4 parts"). "Fix in your file"
+  gives the submodel and the lines; "This step adds" shows the step's parts, to find
+  the page in the booklet. A note says when a submodel is used more than once, so one
+  fix covers several steps. The chips at the top turn small shifts, prints and
+  minifigures on or off.
+
+"Parts & colours": the same counts LDCad gives, as bars (instructions / your model), with
+every step that uses each part and colour. Type in the search box, e.g. "3023 dark tan".
+
+GOOD TO KNOW
+------------
+- With the booklets, bicheck compares step by step and part by part: the parts list at the
+  back of the last booklet gives the totals, the parts box of each step says where a part
+  goes, and each step of your model is matched to the booklet steps it holds the parts of.
+  Your own steps don't need to follow the booklet. A right part in a wrong spot of its step
+  can't be seen this way (the booklets have no positions).
+- Part numbers are read from the booklets' element numbers with Rebrickable's element table
+  (included). Only the downloads talk to the internet: the booklets come from lego.com, and
+  with a Brickset key the set number and the key go to Brickset for the list of booklets.
+  The key is saved in Documents\bicheck\settings.json.
+- With an LXFML instructions file instead of the booklets (on the command line) bicheck
+  lines your model up in 3D and also finds parts in the wrong spot and parts swapped with a
+  neighbour ("Swapped"). Step numbers then count every step, sub-builds first, so they can
+  differ from the booklet.
+- Minifigures: their parts are listed under the "Minifigures" filter (off at first),
+  since figures are often left out of models or built differently.
+- Sections placed apart or turned at an angle (a car parked crooked) are lined up on
+  their own. LDraw assemblies (e.g. 3829c01 steering wheel) are compared part by part.
+- Prints: a plain part where the instructions have a print is listed separately
+  ("Print and placement differences"), since LDraw lacks many prints.
+- For the best part matching, have BrickLink Studio installed (bicheck reads its LEGO-to-
+  LDraw part table). Part and colour names come from your LDraw library.
+
+FROM THE COMMAND LINE
+---------------------
+  bicheck model.mpd                 (the set is read from the model, its booklets found)
+  bicheck model.mpd booklet1.pdf booklet2.pdf
+  bicheck model.mpd https://www.lego.com/cdn/product-assets/product.bi.core.pdf/6672240.pdf ...
+  bicheck model.mpd --brickset-key YOUR-KEY            (saved: booklets download by themselves)
+  bicheck model.mpd 21373
+  bicheck model.mpd 21373 --find 3023 "dark tan"      (every step that uses a part)
+  bicheck model.mpd instructions.lxfml --ldraw C:\LDraw
+  bicheck --help

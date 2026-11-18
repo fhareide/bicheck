@@ -1,0 +1,18 @@
+# build output (packaging/make_release.py makes the zips)
+build/
+dist/
+release/
+*.spec
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# generated reports: only the current example is kept
+examples/
+*.bicheck.html
+
+# local tools
+.claude/
