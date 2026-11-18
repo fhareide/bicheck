@@ -114,3 +114,7 @@ instructions), puts in known mistakes (colours swapped for their neighbours, pla
 tiles, parts left out and added), turns and moves the whole model and lifts one submodel
 off, then checks what bicheck finds. On Downton Abbey (21373, 4,736 parts) it finds all of
 them, over 8 random seeds, in about 5 seconds a run.
+
+## Licence
+
+MIT (see `LICENSE`). The tables in `bicheck/data` come from [Rebrickable](https://rebrickable.com/downloads/).
