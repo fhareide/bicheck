@@ -115,6 +115,20 @@ tiles, parts left out and added), turns and moves the whole model and lifts one 
 off, then checks what bicheck finds. On Downton Abbey (21373, 4,736 parts) it finds all of
 them, over 8 random seeds, in about 5 seconds a run.
 
+## Releases
+
+`.github/workflows/release.yml` builds `bicheck.exe` on Windows and zips it with
+`packaging/build_exe.py` and `packaging/make_release.py`. To publish a release, set the version in
+`bicheck/__init__.py` and `pyproject.toml`, then push a matching tag:
+
+```
+git tag v0.7.0
+git push origin v0.7.0
+```
+
+Run the workflow by hand (Actions > release > Run workflow) to get the zips as a build artifact
+without a release. Locally: `python packaging/build_exe.py`, then `python packaging/make_release.py`.
+
 ## Licence
 
 MIT (see `LICENSE`). The tables in `bicheck/data` come from [Rebrickable](https://rebrickable.com/downloads/).

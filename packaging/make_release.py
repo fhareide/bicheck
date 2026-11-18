@@ -10,7 +10,8 @@ os.makedirs("release", exist_ok=True)
 with zipfile.ZipFile(f"release/bicheck-{V}-windows.zip", "w", zipfile.ZIP_DEFLATED) as z:
     z.write("dist/bicheck.exe", "bicheck/bicheck.exe")
     z.write("packaging/HOW-TO-USE.txt", "bicheck/HOW-TO-USE.txt")
-files = ["README.md", "pyproject.toml", "packaging/HOW-TO-USE.txt", "packaging/launcher.py", "packaging/make_release.py"]
+    z.write("LICENSE", "bicheck/LICENSE.txt")
+files = ["README.md", "LICENSE", "pyproject.toml"] + sorted(glob.glob("packaging/*.py")) + ["packaging/HOW-TO-USE.txt"]
 files += [p for p in glob.glob("bicheck/**/*", recursive=True) if os.path.isfile(p) and "__pycache__" not in p]
 files += glob.glob("tests/*.py")
 with zipfile.ZipFile(f"release/bicheck-{V}-source.zip", "w", zipfile.ZIP_DEFLATED) as z:

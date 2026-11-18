@@ -1,0 +1,63 @@
+# Builds bicheck.exe and the release zips on Windows.
+#   - push a tag "v<version>" (the version in bicheck/__init__.py): a GitHub release with the zips
+#   - run it by hand (Actions > release > Run workflow): the zips as a build artifact only
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install numpy pillow pymupdf pyinstaller pytest
+
+      - name: Test
+        run: python -m pytest -q tests
+
+      - name: Version
+        id: version
+        run: |
+          v=$(python -c "import bicheck; print(bicheck.__version__)")
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "v$v" ]]; then
+            echo "::error::tag $GITHUB_REF_NAME doesn't match the version in bicheck/__init__.py ($v)"
+            exit 1
+          fi
+
+      - name: Build bicheck.exe
+        run: python packaging/build_exe.py
+
+      - name: Check the exe starts
+        run: dist/bicheck.exe --help > /dev/null
+
+      - name: Zip
+        run: python packaging/make_release.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bicheck-${{ steps.version.outputs.version }}
+          path: release/*.zip
+
+      - name: GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release/*.zip \
+            --title "bicheck ${{ steps.version.outputs.version }}" --generate-notes
