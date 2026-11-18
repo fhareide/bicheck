@@ -1,11 +1,14 @@
 """Zip the Windows build (dist/bicheck.exe, made with PyInstaller) and the source into release/."""
 import glob
 import os
+import sys
 import zipfile
 
-from bicheck import __version__ as V
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+from bicheck import __version__ as V  # noqa: E402
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.chdir(ROOT)
 os.makedirs("release", exist_ok=True)
 with zipfile.ZipFile(f"release/bicheck-{V}-windows.zip", "w", zipfile.ZIP_DEFLATED) as z:
     z.write("dist/bicheck.exe", "bicheck/bicheck.exe")
