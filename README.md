@@ -132,3 +132,7 @@ without a release. Locally: `python packaging/build_exe.py`, then `python packag
 ## Licence
 
 MIT (see `LICENSE`). The tables in `bicheck/data` come from [Rebrickable](https://rebrickable.com/downloads/).
+
+## Trademarks
+
+LEGO® is a trademark of the LEGO Group, which does not sponsor, authorize or endorse bicheck. bicheck is an independent project, not affiliated with the LEGO Group, BrickLink, Rebrickable or Brickset; other product names are trademarks of their owners.

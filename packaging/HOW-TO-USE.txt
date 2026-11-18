@@ -89,3 +89,9 @@ FROM THE COMMAND LINE
   bicheck model.mpd 21373 --find 3023 "dark tan"      (every step that uses a part)
   bicheck model.mpd instructions.lxfml --ldraw C:\LDraw
   bicheck --help
+
+LEGO, TRADEMARKS
+----------------
+LEGO(R) is a trademark of the LEGO Group, which does not sponsor, authorize or endorse
+bicheck. bicheck is an independent project, not affiliated with the LEGO Group, BrickLink,
+Rebrickable or Brickset; other product names are trademarks of their owners.

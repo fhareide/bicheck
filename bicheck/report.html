@@ -383,7 +383,8 @@ function renderParts() {
 // -- footer -------------------------------------------------------------------------------
 const skipped = Object.entries(S.skipped || {}).map(([k, n]) => `${fmt(n)} ${esc(k)}`).join(" · ");
 $("#foot").innerHTML = `<span>Step numbers count every instructions step in reading order, a sub-build’s steps before the step that adds it; if they don’t match your booklet, use the bag and the “This step adds” parts to find the page.</span>
-  ${skipped ? `<span>Left out: ${skipped}.</span>` : ""}<span>Part pictures drawn from your LDraw library. Part tables: ${esc((S.mapping || []).map(p => p.split(/[\\/]/).pop()).join(", "))}.</span>`;
+  ${skipped ? `<span>Left out: ${skipped}.</span>` : ""}<span>Part pictures drawn from your LDraw library. Part tables: ${esc((S.mapping || []).map(p => p.split(/[\\/]/).pop()).join(", "))}.</span>
+  <span>LEGO® is a trademark of the LEGO Group, which does not sponsor, authorize or endorse bicheck. bicheck is an independent project, not affiliated with the LEGO Group, BrickLink, Rebrickable or Brickset; other product names are trademarks of their owners.</span>`;
 
 $("#q").addEventListener("input", () => { shown = 40; pshown = 80; renderSteps(); renderParts(); });
 drawFilters(); drawPFilters(); renderSteps(); renderParts();
